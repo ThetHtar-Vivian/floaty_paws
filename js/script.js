@@ -45,13 +45,17 @@ if (!canvas) {
   let gap = 250;
   const hitboxPaddingX = 12;
   const hitboxPaddingY = 18;
+  let lives = 5;
   const maxLives = 1;
   let hitCooldown = 0;
   let respawning = false;
   const respawnTargetY = 250;
   const respawnSpeed = 0.4;
   let invincible = false;
+  const invincibleTime = 2000;
+  let blinkInterval = null;
   let visible = true;
+  let spawnDistance = 700; // distance between obstacles
 
   // CAT JVARIABLES
   let catScaleX = 1;
@@ -81,8 +85,16 @@ if (!canvas) {
   const bgNight = new Image();
   bgNight.src = "assets/images/game-bgn.jpeg";
 
+  const cakeImg = new Image();
+  cakeImg.src = "assets/images/cake.png";
+
   const backgrounds = [bgMorning, bgEvening, bgNight];
+
+  // Current background
   let currentBg = backgrounds[0];
+  let nextBg = null;
+  let bgFade = 0;
+  let isTransitioning = false;
 
   let bgX = 0;
   const bgSpeed = 1.5;

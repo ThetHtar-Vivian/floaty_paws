@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="navbar-container">
+        <a href="index.html" class="navbar-logo">
+          <img src="assets/images/paws.png" alt="Floaty Paws logo" />
+          <span>Floaty Paws</span>
+        </a>
+        <button class="navbar-toggle">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+        <ul class="navbar-menu">
+          <li><a href="index.html" class="">Home</a></li>
+          <li><a href="" class="active">Play</a></li>
+          <li><a href="cat_selection.html" class="">Character</a></li>
+          <li><a href="how_to_play.html">How To Play</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="page">
+      <div class="game-card">
+        <canvas id="gameCanvas"></canvas>
+        <div class="game-ui">
+          <p id="scoreDisplay">Score: 0</p>
+          <p id="soundBtn">Sound: ON</p>
+        </div>
+      </div>
+    </main>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>

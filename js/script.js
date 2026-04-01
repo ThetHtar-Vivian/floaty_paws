@@ -99,7 +99,32 @@ if (!canvas) {
   let bgX = 0;
   const bgSpeed = 1.5;
 
+  //==========================
+  //Load Sounds
+  //==========================
+const hitSound = new Audio("assets/audios/hit.mp3");
+hitSound.volume = 0.1;
+
+const cakeSound = new Audio("assets/audios/cake.mp3");
+cakeSound.volume = 0.1;
+
+const jumpSound = new Audio("assets/audios/jump.mp3");
+jumpSound.volume = 0.5; 
+let soundEnabled = true;
+
+const soundToggleBtn = document.getElementById("soundBtn");
+soundToggleBtn.addEventListener("click", () => {
+  soundEnabled = !soundEnabled;
+  soundToggleBtn.textContent = soundEnabled ? "Sound: ON" : "Sound: OFF";
+});
+
+//Cake Object For Level Mode
+let cake = { x: 0, y: 0, width: 150, height: 150, visible: false };
+
+
+  //==========================
   // Overlays
+  //==========================
   const startScreen = document.createElement("div");
   startScreen.className = "overlay";
   startScreen.innerHTML = `<h2>Floaty Paws</h2><p>Press SPACE or Click to Start</p>`;
@@ -132,6 +157,34 @@ if (!canvas) {
     modeScreen.classList.add("hidden");
     startGame();
   });
+
+
+
+  //==========================
+  // LOAD Sound Function
+  //==========================
+
+  function playJumpSound() {
+  if (!soundEnabled) return;
+
+  jumpSound.currentTime = 0;
+  jumpSound.play().catch(() => {});
+}
+
+function playHitSound() {
+  if (!soundEnabled) return;
+
+  hitSound.currentTime = 0;
+  hitSound.play().catch(() => {});
+}
+
+function playCakeSound() {
+  if (!soundEnabled) return;
+  cakeSound.currentTime = 0;
+  cakeSound.play().catch(() => {});
+}
+
+
 
   // Reset and Spawn
   function resetGame() {
@@ -339,6 +392,7 @@ if (!canvas) {
 
         case GameState.PLAYING:
           player.velocity = -8;
+          playJumpSound();
           break;
 
         case GameState.GAME_OVER:
@@ -353,6 +407,7 @@ if (!canvas) {
     if (currentState === GameState.START) startGame();
     else if (currentState === GameState.PLAYING) {
       player.velocity = -8;
+      playJumpSound();
     }
   });
 

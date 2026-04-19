@@ -30,7 +30,7 @@ if (!canvas) {
 
   const GameMode = {
     ENDLESS: "endless",
-    LEVEL: "level"
+    LEVEL: "level",
   };
   let currentMode = GameMode.ENDLESS;
   let level = 1;
@@ -45,7 +45,7 @@ if (!canvas) {
   let gap = 250; //gap between up and down
   const hitboxPaddingX = 12;
   const hitboxPaddingY = 18;
-   const nearMissDistance = 10;
+  const nearMissDistance = 10;
   let lives = 5;
   const maxLives = 5;
   let hitCooldown = 0;
@@ -59,7 +59,7 @@ if (!canvas) {
   let spawnDistance = 700; // distance between obstacles
   let nearMissActive = false;
   let flashAlpha = 0;
-  
+
   // CAT JVARIABLES
   let catScaleX = 1;
   let catScaleY = 1;
@@ -109,25 +109,24 @@ if (!canvas) {
   //==========================
   //Load Sounds
   //==========================
-const hitSound = new Audio("assets/audios/hit.mp3");
-hitSound.volume = 0.1;
+  const hitSound = new Audio("assets/audios/hit.mp3");
+  hitSound.volume = 0.1;
 
-const cakeSound = new Audio("assets/audios/cake.mp3");
-cakeSound.volume = 0.1;
+  const cakeSound = new Audio("assets/audios/cake.mp3");
+  cakeSound.volume = 0.1;
 
-const jumpSound = new Audio("assets/audios/jump.mp3");
-jumpSound.volume = 0.5; 
-let soundEnabled = true;
+  const jumpSound = new Audio("assets/audios/jump.mp3");
+  jumpSound.volume = 0.5;
+  let soundEnabled = true;
 
-const soundToggleBtn = document.getElementById("soundBtn");
-soundToggleBtn.addEventListener("click", () => {
-  soundEnabled = !soundEnabled;
-  soundToggleBtn.textContent = soundEnabled ? "Sound: ON" : "Sound: OFF";
-});
+  const soundToggleBtn = document.getElementById("soundBtn");
+  soundToggleBtn.addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    soundToggleBtn.textContent = soundEnabled ? "Sound: ON" : "Sound: OFF";
+  });
 
-//Cake Object For Level Mode
-let cake = { x: 0, y: 0, width: 150, height: 150, visible: false };
-
+  //Cake Object For Level Mode
+  let cake = { x: 0, y: 0, width: 150, height: 150, visible: false };
 
   //==========================
   // Overlays
@@ -143,6 +142,14 @@ let cake = { x: 0, y: 0, width: 150, height: 150, visible: false };
       <p id="finalScore">0</p>
       <button id="playAgainBtn">Play Again</button>`;
   document.querySelector(".game-card").appendChild(gameOverScreen);
+
+  const pauseScreen = document.createElement("div");
+  pauseScreen.className = "overlay hidden";
+  pauseScreen.innerHTML = `
+  <h2>Paused</h2>
+  <p>Press P to Resume</p>
+`;
+  document.querySelector(".game-card").appendChild(pauseScreen);
 
   const finalScore = gameOverScreen.querySelector("#finalScore");
   const playAgainBtn = gameOverScreen.querySelector("#playAgainBtn");
@@ -179,31 +186,30 @@ let cake = { x: 0, y: 0, width: 150, height: 150, visible: false };
   //==========================
 
   function playJumpSound() {
-  if (!soundEnabled) return;
+    if (!soundEnabled) return;
 
-  jumpSound.currentTime = 0;
-  jumpSound.play().catch(() => {});
-}
+    jumpSound.currentTime = 0;
+    jumpSound.play().catch(() => {});
+  }
 
-function playHitSound() {
-  if (!soundEnabled) return;
+  function playHitSound() {
+    if (!soundEnabled) return;
 
-  hitSound.currentTime = 0;
-  hitSound.play().catch(() => {});
-}
+    hitSound.currentTime = 0;
+    hitSound.play().catch(() => {});
+  }
 
-function playCakeSound() {
-  if (!soundEnabled) return;
-  cakeSound.currentTime = 0;
-  cakeSound.play().catch(() => {});
-}
+  function playCakeSound() {
+    if (!soundEnabled) return;
+    cakeSound.currentTime = 0;
+    cakeSound.play().catch(() => {});
+  }
 
-
-//=====================
-// Reset and Spawn
-//=====================
+  //=====================
+  // Reset and Spawn
+  //=====================
   function resetGame() {
-       lives = maxLives;
+    lives = maxLives;
     player = { x: 80, y: 300, velocity: 0 };
     obstacles = [];
     score = 0;
@@ -215,10 +221,10 @@ function playCakeSound() {
     cake.visible = false;
 
     bgIndex = 0;
-nextBg = null;
-isTransitioning = false;
-bgFade = 0;
-nextBgMilestone = 500;
+    nextBg = null;
+    isTransitioning = false;
+    bgFade = 0;
+    nextBgMilestone = 500;
     startScreen.classList.remove("hidden");
     gameOverScreen.classList.add("hidden");
   }
@@ -233,9 +239,9 @@ nextBgMilestone = 500;
     });
   }
 
-//===================
-// UPDATE FUNCTIONS
-//====================
+  //===================
+  // UPDATE FUNCTIONS
+  //====================
   function updatePlayer() {
     if (currentState !== GameState.PLAYING) return;
 
@@ -260,26 +266,25 @@ nextBgMilestone = 500;
       triggerSquash(0.2, -0.2);
       handleCollision();
     }
-  
-// =========================
-// LEVEL MODE: CHECK CAKE COLLISION
-// =========================
- if (currentMode === GameMode.LEVEL && cake.visible) {
+
+    // =========================
+    // LEVEL MODE: CHECK CAKE COLLISION
+    // =========================
+    if (currentMode === GameMode.LEVEL && cake.visible) {
       if (
         player.x + playerWidth > cake.x &&
         player.x < cake.x + cake.width &&
         player.y + playerHeight > cake.y &&
         player.y < cake.y + cake.height
       ) {
-  // Player touched cake → trigger level pause
-      cake.visible = false;
-      playCakeSound(); //cake sound
-  // showLevelPause();
+        // Player touched cake → trigger level pause
+        cake.visible = false;
+        playCakeSound(); //cake sound
+        // showLevelPause();
         setTimeout(() => showLevelPause(), 10);
       }
     }
   }
-
 
   function updateObstacles() {
     if (currentState !== GameState.PLAYING) return;
@@ -288,12 +293,12 @@ nextBgMilestone = 500;
       o.x -= gameSpeed;
 
       // LEVEL MODE: count obstacle passed
-       if (currentMode === GameMode.LEVEL) {
-    if (!o.passed && o.x + obstacleWidth < player.x) {
-      o.passed = true;
-      obstaclesPassed++;
-    }
-  }
+      if (currentMode === GameMode.LEVEL) {
+        if (!o.passed && o.x + obstacleWidth < player.x) {
+          o.passed = true;
+          obstaclesPassed++;
+        }
+      }
       const hit =
         player.x + hitboxPaddingX < o.x + obstacleWidth &&
         player.x + playerWidth - hitboxPaddingX > o.x &&
@@ -307,76 +312,70 @@ nextBgMilestone = 500;
 
       //near miss effects
       const isCloseX =
-  player.x < o.x + obstacleWidth + nearMissDistance &&
-  player.x + playerWidth > o.x - nearMissDistance;
+        player.x < o.x + obstacleWidth + nearMissDistance &&
+        player.x + playerWidth > o.x - nearMissDistance;
 
-const isNearTop =
-  player.y + playerHeight > o.top - nearMissDistance &&
-  player.y < o.top;
+      const isNearTop =
+        player.y + playerHeight > o.top - nearMissDistance && player.y < o.top;
 
-const isNearBottom =
-  player.y < canvas.height - o.bottom + nearMissDistance &&
-  player.y + playerHeight > canvas.height - o.bottom;
+      const isNearBottom =
+        player.y < canvas.height - o.bottom + nearMissDistance &&
+        player.y + playerHeight > canvas.height - o.bottom;
 
-const isCloseY = isNearTop || isNearBottom;
+      const isCloseY = isNearTop || isNearBottom;
 
-const nearMiss = isCloseX && isCloseY;
+      const nearMiss = isCloseX && isCloseY;
 
-if (nearMiss && !nearMissActive) {
-  nearMissActive = true;
-  triggerNearMissEffect();
-  setTimeout(() => {
-    nearMissActive = false;
-  }, 300);
-}
-
+      if (nearMiss && !nearMissActive) {
+        nearMissActive = true;
+        triggerNearMissEffect();
+        setTimeout(() => {
+          nearMissActive = false;
+        }, 300);
+      }
     });
-       if (cake.visible) {
-  cake.x -= gameSpeed;
-}
+    if (cake.visible) {
+      cake.x -= gameSpeed;
+    }
 
-    obstacles = obstacles.filter(o => o.x + obstacleWidth > 0);
-
+    obstacles = obstacles.filter((o) => o.x + obstacleWidth > 0);
 
     if (currentMode === GameMode.ENDLESS) {
       if (obstacles.length === 0 || obstacles.at(-1).x < 200) spawnObstacle();
-    }else if (currentMode === GameMode.LEVEL) {
+    } else if (currentMode === GameMode.LEVEL) {
       if (obstaclesPassed < obstaclesPerLevel) {
-  if (
-    obstacles.length === 0 ||
-    obstacles.at(-1).x < canvas.width - spawnDistance
-  ) {
-    spawnObstacle();
-  }
-}
+        if (
+          obstacles.length === 0 ||
+          obstacles.at(-1).x < canvas.width - spawnDistance
+        ) {
+          spawnObstacle();
+        }
+      }
 
       // Dynamically place cake after last obstacle
       if (!cake.visible && obstaclesPassed >= obstaclesPerLevel) {
         cake.x = canvas.width + 100;
-cake.y = canvas.height / 2 - cake.height / 2;
-cake.visible = true;
+        cake.y = canvas.height / 2 - cake.height / 2;
+        cake.visible = true;
       }
-
-  
     }
   }
 
- function checkScore() {
+  function checkScore() {
     if (currentState === GameState.PLAYING) {
       score++;
       if (currentMode === GameMode.ENDLESS) {
-  if (score >= nextBgMilestone && !isTransitioning) {
+        if (score >= nextBgMilestone && !isTransitioning) {
+          nextBgMilestone += 500;
+          gameSpeed += 0.2;
 
-    nextBgMilestone += 500;
-    gameSpeed += 0.2;
+          bgIndex = (bgIndex + 1) % backgrounds.length;
 
-    bgIndex = (bgIndex + 1) % backgrounds.length;
-
-    nextBg = backgrounds[bgIndex];
-    isTransitioning = true;
-    bgFade = 0;
-  }
-} else if (currentMode === GameMode.LEVEL) {
+          nextBg = backgrounds[bgIndex];
+          isTransitioning = true;
+          bgFade = 0;
+        }
+      } else if (currentMode === GameMode.LEVEL) {
         // obstacles.forEach(o => {
         //   if (!o.passed && o.x + obstacleWidth < player.x) {
         //     o.passed = true;
@@ -388,63 +387,62 @@ cake.visible = true;
     }
   }
 
-function showLevelPause() {
-  currentState = GameState.LEVEL_PAUSE;
+  function showLevelPause() {
+    currentState = GameState.LEVEL_PAUSE;
 
-  const pauseScreen = document.createElement("div");
-  pauseScreen.className = "overlay";
-  pauseScreen.innerHTML = `
+    const pauseScreen = document.createElement("div");
+    pauseScreen.className = "overlay";
+    pauseScreen.innerHTML = `
     <h2>Rest and get ready for the next level!</h2>
     <img src="assets/images/cake.png" style="width:100px;height:100px;"/>
     <p>Click or press SPACE to continue</p>
   `;
 
-  document.querySelector(".game-card").appendChild(pauseScreen);
+    document.querySelector(".game-card").appendChild(pauseScreen);
 
-  let resumed = false;
+    let resumed = false;
 
-  function resumeLevel() {
-    if (resumed) return;
-    resumed = true;
+    function resumeLevel() {
+      if (resumed) return;
+      resumed = true;
 
-    document.removeEventListener("keydown", handleKey);
-    pauseScreen.remove();
+      document.removeEventListener("keydown", handleKey);
+      pauseScreen.remove();
 
-    currentMode = GameMode.LEVEL;
+      currentMode = GameMode.LEVEL;
 
-    obstacles = [];
-    obstaclesPassed = 0;
+      obstacles = [];
+      obstaclesPassed = 0;
 
-    obstaclesPerLevel += 1;
-    gameSpeed += 0.5;
-    level++;
+      obstaclesPerLevel += 1;
+      gameSpeed += 0.5;
+      level++;
 
       if (isTransitioning) {
-    currentBg = nextBg;
-    isTransitioning = false;
-    bgFade = 0;
+        currentBg = nextBg;
+        isTransitioning = false;
+        bgFade = 0;
+      }
+
+      nextBg = backgrounds[(level - 1) % backgrounds.length];
+      isTransitioning = true;
+      bgFade = 0;
+
+      cake.visible = false;
+
+      spawnDistance = Math.max(200, spawnDistance - 20);
+      gap = Math.max(100, gap - 5);
+
+      startCountdown();
+    }
+
+    function handleKey(e) {
+      if (e.code === "Space") resumeLevel();
+    }
+
+    pauseScreen.addEventListener("click", resumeLevel);
+    document.addEventListener("keydown", handleKey);
   }
-
-    nextBg = backgrounds[(level - 1) % backgrounds.length];
-    isTransitioning = true;
-    bgFade = 0;
-
-    cake.visible = false;
-
-    spawnDistance = Math.max(200, spawnDistance - 20);
-    gap = Math.max(100, gap - 5);
-
-    startCountdown();
-  }
-
-  function handleKey(e) {
-    if (e.code === "Space") resumeLevel();
-  }
-
-  pauseScreen.addEventListener("click", resumeLevel);
-  document.addEventListener("keydown", handleKey);
-}
-
 
   function animateScore() {
     const scoreDisplay = document.getElementById("scoreDisplay");
@@ -452,7 +450,6 @@ function showLevelPause() {
     void scoreDisplay.offsetWidth;
     scoreDisplay.classList.add("score-bounce");
   }
-
 
   // =========================
   // JUICE EFFECT FUNCTIONS
@@ -475,7 +472,13 @@ function showLevelPause() {
     ctx.save();
     ctx.fillStyle = "rgba(255,200,255,0.6)";
     ctx.beginPath();
-    ctx.arc(player.x + playerWidth/2, player.y + playerHeight/2, 40, 0, Math.PI*2);
+    ctx.arc(
+      player.x + playerWidth / 2,
+      player.y + playerHeight / 2,
+      40,
+      0,
+      Math.PI * 2,
+    );
     ctx.fill();
     ctx.restore();
   }
@@ -496,7 +499,7 @@ function showLevelPause() {
     gameOverScreen.classList.remove("hidden");
   }
 
-   function handleCollision() {
+  function handleCollision() {
     playHitSound();
 
     if (invincible || respawning) return;
@@ -512,7 +515,9 @@ function showLevelPause() {
       invincible = true;
       visible = false;
 
-      blinkInterval = setInterval(() => { visible = !visible; }, 100);
+      blinkInterval = setInterval(() => {
+        visible = !visible;
+      }, 100);
 
       setTimeout(() => {
         invincible = false;
@@ -521,27 +526,42 @@ function showLevelPause() {
       }, invincibleTime);
 
       canvas.style.border = "4px solid red";
-      setTimeout(() => canvas.style.border = "2px solid var(--accent-soft)", 200);
+      setTimeout(
+        () => (canvas.style.border = "2px solid var(--accent-soft)"),
+        200,
+      );
     }
   }
 
- function drawBackground() {
-  const x = Math.floor(bgX);
+  function drawBackground() {
+    const x = Math.floor(bgX);
 
-  // Draw current background
-  ctx.globalAlpha = 1;
-  ctx.drawImage(currentBg, x, 0, canvas.width, canvas.height);
-  ctx.drawImage(currentBg, x + canvas.width - 2, 0, canvas.width, canvas.height);
+    // Draw current background
+    ctx.globalAlpha = 1;
+    ctx.drawImage(currentBg, x, 0, canvas.width, canvas.height);
+    ctx.drawImage(
+      currentBg,
+      x + canvas.width - 2,
+      0,
+      canvas.width,
+      canvas.height,
+    );
 
-  // Draw fade overlay
-  if (isTransitioning && nextBg) {
-    ctx.globalAlpha = bgFade;
-    ctx.drawImage(nextBg, x, 0, canvas.width, canvas.height);
-    ctx.drawImage(nextBg, x + canvas.width - 1, 0, canvas.width, canvas.height);
+    // Draw fade overlay
+    if (isTransitioning && nextBg) {
+      ctx.globalAlpha = bgFade;
+      ctx.drawImage(nextBg, x, 0, canvas.width, canvas.height);
+      ctx.drawImage(
+        nextBg,
+        x + canvas.width - 1,
+        0,
+        canvas.width,
+        canvas.height,
+      );
+    }
+
+    ctx.globalAlpha = 1;
   }
-
-  ctx.globalAlpha = 1;
-}
 
   function drawObstacles() {
     obstacles.forEach((o) => {
@@ -578,34 +598,34 @@ function showLevelPause() {
     }
     ctx.restore();
   }
-function drawLevelUI() {
-  const text = `Level ${level}`;
+  function drawLevelUI() {
+    const text = `Level ${level}`;
 
-  ctx.font = "16px 'Press Start 2P'";
-  const padding = 10;
-  const textWidth = ctx.measureText(text).width;
+    ctx.font = "16px 'Press Start 2P'";
+    const padding = 10;
+    const textWidth = ctx.measureText(text).width;
 
-  const boxWidth = textWidth + padding * 2;
-  const boxHeight = 30;
+    const boxWidth = textWidth + padding * 2;
+    const boxHeight = 30;
 
-  const x = canvas.width - boxWidth - 20;
-  const y = 20;
+    const x = canvas.width - boxWidth - 20;
+    const y = 20;
 
-  // Background box
-  ctx.fillStyle = "rgba(224, 224, 224, 0.79)";
-  ctx.beginPath();
-  ctx.roundRect(x, y, boxWidth, boxHeight, 8);
-  ctx.fill();
+    // Background box
+    ctx.fillStyle = "rgba(224, 224, 224, 0.79)";
+    ctx.beginPath();
+    ctx.roundRect(x, y, boxWidth, boxHeight, 8);
+    ctx.fill();
 
-  // Border (optional glow look)
-  ctx.strokeStyle = "#b300ff";
-  ctx.lineWidth = 2;
-  ctx.stroke();
+    // Border (optional glow look)
+    ctx.strokeStyle = "#b300ff";
+    ctx.lineWidth = 2;
+    ctx.stroke();
 
-  // Text
-  ctx.fillStyle = "#a300d9";
-  ctx.fillText(text, x + padding, y + 20);
-}
+    // Text
+    ctx.fillStyle = "#a300d9";
+    ctx.fillText(text, x + padding, y + 20);
+  }
   function drawUI() {
     document.getElementById("scoreDisplay").textContent = "Score: " + score;
 
@@ -622,12 +642,6 @@ function drawLevelUI() {
       if (cake.visible) {
         ctx.drawImage(cakeImg, cake.x, cake.y, cake.width, cake.height);
       }
-    }
-
-    if (currentState === GameState.PAUSED) {
-      ctx.fillStyle = "white";
-      ctx.font = "16px 'Press Start 2P'";
-      ctx.fillText("PAUSED", 140, 300);
     }
   }
 
@@ -646,15 +660,15 @@ function drawLevelUI() {
       updateObstacles();
       checkScore();
     }
-     if (isTransitioning) {
-  bgFade += 0.001;  // speed of fade
+    if (isTransitioning) {
+      bgFade += 0.001; // speed of fade
 
-  if (bgFade >= 1) {
-    bgFade = 1;
-    currentBg = nextBg;
-    isTransitioning = false;
-  }
-}
+      if (bgFade >= 1) {
+        bgFade = 1;
+        currentBg = nextBg;
+        isTransitioning = false;
+      }
+    }
   }
 
   function draw() {
@@ -664,11 +678,11 @@ function drawLevelUI() {
     drawPlayer();
     drawUI();
     if (flashAlpha > 0) {
-  ctx.fillStyle = `rgba(255, 0, 0, ${flashAlpha})`;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = `rgba(255, 0, 0, ${flashAlpha})`;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  flashAlpha *= 0.85; // smooth fade
-}
+      flashAlpha *= 0.85; // smooth fade
+    }
   }
 
   function loop() {
@@ -677,37 +691,37 @@ function drawLevelUI() {
     requestAnimationFrame(loop);
   }
 
-     // =========================
+  // =========================
   // Countdown Function
   // =========================
-function startCountdown() {
-  currentState = GameState.COUNTDOWN;
+  function startCountdown() {
+    currentState = GameState.COUNTDOWN;
 
-  const countdownScreen = document.createElement("div");
-  countdownScreen.className = "overlay";
-  document.querySelector(".game-card").appendChild(countdownScreen);
+    const countdownScreen = document.createElement("div");
+    countdownScreen.className = "overlay";
+    document.querySelector(".game-card").appendChild(countdownScreen);
 
-  let count = 3;
-  countdownScreen.innerHTML = `<h1>${count}</h1>`;
+    let count = 3;
+    countdownScreen.innerHTML = `<h1>${count}</h1>`;
 
-  const interval = setInterval(() => {
-    count--;
+    const interval = setInterval(() => {
+      count--;
 
-    if (count > 0) {
-      countdownScreen.innerHTML = `<h1>${count}</h1>`;
-    } else if (count === 0) {
-      countdownScreen.innerHTML = `<h1>GO!</h1>`;
-    } else {
-      clearInterval(interval);
-      countdownScreen.remove();
+      if (count > 0) {
+        countdownScreen.innerHTML = `<h1>${count}</h1>`;
+      } else if (count === 0) {
+        countdownScreen.innerHTML = `<h1>GO!</h1>`;
+      } else {
+        clearInterval(interval);
+        countdownScreen.remove();
 
-      // Reset player cleanly
-      player.velocity = 0;
+        // Reset player cleanly
+        player.velocity = 0;
 
-      currentState = GameState.PLAYING; // <-- ONLY HERE
-    }
-  }, 1000);
-}
+        currentState = GameState.PLAYING; // <-- ONLY HERE
+      }
+    }, 1000);
+  }
 
   document.addEventListener("keydown", (e) => {
     if (e.code === "Space") {
@@ -727,7 +741,7 @@ function startCountdown() {
         case GameState.GAME_OVER:
           resetGame();
           break;
-        
+
         case GameState.COUNTDOWN:
           //do nothing during countdown
 
@@ -735,13 +749,15 @@ function startCountdown() {
       }
     }
 
-     if (e.code === "KeyP") {
-    if (currentState === GameState.PLAYING) {
-      currentState = GameState.PAUSED;
-    } else if (currentState === GameState.PAUSED) {
-      currentState = GameState.PLAYING;
+    if (e.code === "KeyP") {
+      if (currentState === GameState.PLAYING) {
+        currentState = GameState.PAUSED;
+        pauseScreen.classList.remove("hidden");
+      } else if (currentState === GameState.PAUSED) {
+        currentState = GameState.PLAYING;
+        pauseScreen.classList.add("hidden");
+      }
     }
-  }
   });
 
   canvas.addEventListener("click", () => {

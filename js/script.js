@@ -45,7 +45,7 @@ if (!canvas) {
   let gap = 250; //gap between up and down
   const hitboxPaddingX = 12;
   const hitboxPaddingY = 18;
-   const nearMissDistance = 8;
+   const nearMissDistance = 10;
   let lives = 5;
   const maxLives = 5;
   let hitCooldown = 0;
@@ -57,6 +57,9 @@ if (!canvas) {
   let blinkInterval = null;
   let visible = true;
   let spawnDistance = 700; // distance between obstacles
+  let nearMissActive = false;
+  let flashAlpha = 0;
+  
   // CAT JVARIABLES
   let catScaleX = 1;
   let catScaleY = 1;
@@ -96,6 +99,9 @@ if (!canvas) {
   let nextBg = null;
   let bgFade = 0;
   let isTransitioning = false;
+  let lastBgChangeScore = 0;
+  let bgIndex = 0;
+  let nextBgMilestone = 500;
 
   let bgX = 0;
   const bgSpeed = 1.5;
@@ -208,6 +214,11 @@ function playCakeSound() {
     catScaleX = catScaleY = targetScaleX = targetScaleY = 1;
     cake.visible = false;
 
+    bgIndex = 0;
+nextBg = null;
+isTransitioning = false;
+bgFade = 0;
+nextBgMilestone = 500;
     startScreen.classList.remove("hidden");
     gameOverScreen.classList.add("hidden");
   }
@@ -295,12 +306,30 @@ function playCakeSound() {
       }
 
       //near miss effects
-      const nearMiss =
-        player.x + hitboxPaddingX < o.x + obstacleWidth + nearMissDistance &&
-        player.x + playerWidth - hitboxPaddingX > o.x - nearMissDistance &&
-        (player.y + hitboxPaddingY < o.top + nearMissDistance || player.y + playerHeight - hitboxPaddingY > canvas.height - o.bottom - nearMissDistance);
+      const isCloseX =
+  player.x < o.x + obstacleWidth + nearMissDistance &&
+  player.x + playerWidth > o.x - nearMissDistance;
 
-      if (nearMiss) triggerNearMissEffect();
+const isNearTop =
+  player.y + playerHeight > o.top - nearMissDistance &&
+  player.y < o.top;
+
+const isNearBottom =
+  player.y < canvas.height - o.bottom + nearMissDistance &&
+  player.y + playerHeight > canvas.height - o.bottom;
+
+const isCloseY = isNearTop || isNearBottom;
+
+const nearMiss = isCloseX && isCloseY;
+
+if (nearMiss && !nearMissActive) {
+  nearMissActive = true;
+  triggerNearMissEffect();
+  setTimeout(() => {
+    nearMissActive = false;
+  }, 300);
+}
+
     });
        if (cake.visible) {
   cake.x -= gameSpeed;
@@ -336,8 +365,18 @@ cake.visible = true;
     if (currentState === GameState.PLAYING) {
       score++;
       if (currentMode === GameMode.ENDLESS) {
-        if (score % 500 === 0) gameSpeed += 0.2;
-      } else if (currentMode === GameMode.LEVEL) {
+  if (score >= nextBgMilestone && !isTransitioning) {
+
+    nextBgMilestone += 500;
+    gameSpeed += 0.2;
+
+    bgIndex = (bgIndex + 1) % backgrounds.length;
+
+    nextBg = backgrounds[bgIndex];
+    isTransitioning = true;
+    bgFade = 0;
+  }
+} else if (currentMode === GameMode.LEVEL) {
         // obstacles.forEach(o => {
         //   if (!o.passed && o.x + obstacleWidth < player.x) {
         //     o.passed = true;
@@ -429,10 +468,7 @@ function showLevelPause() {
   }
 
   function triggerNearMissEffect() {
-    canvas.style.boxShadow = "0 0 20px rgba(255,200,255,0.6), 0 12px 30px rgba(0,0,0,0.35)";
-    setTimeout(() => {
-      canvas.style.boxShadow = "inset 0 0 0 2px var(--accent-soft), 0 12px 30px rgba(0,0,0,0.35)";
-    }, 150);
+    flashAlpha = 0.6; // strength of flash
   }
 
   function triggerCollisionPuff() {
@@ -542,7 +578,34 @@ function showLevelPause() {
     }
     ctx.restore();
   }
+function drawLevelUI() {
+  const text = `Level ${level}`;
 
+  ctx.font = "16px 'Press Start 2P'";
+  const padding = 10;
+  const textWidth = ctx.measureText(text).width;
+
+  const boxWidth = textWidth + padding * 2;
+  const boxHeight = 30;
+
+  const x = canvas.width - boxWidth - 20;
+  const y = 20;
+
+  // Background box
+  ctx.fillStyle = "rgba(224, 224, 224, 0.79)";
+  ctx.beginPath();
+  ctx.roundRect(x, y, boxWidth, boxHeight, 8);
+  ctx.fill();
+
+  // Border (optional glow look)
+  ctx.strokeStyle = "#b300ff";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Text
+  ctx.fillStyle = "#a300d9";
+  ctx.fillText(text, x + padding, y + 20);
+}
   function drawUI() {
     document.getElementById("scoreDisplay").textContent = "Score: " + score;
 
@@ -553,9 +616,7 @@ function showLevelPause() {
     ctx.fillText(livesDisplay, 10, 30);
 
     if (currentMode === GameMode.LEVEL) {
-      ctx.fillStyle = "yellow";
-      ctx.font = "20px 'Press Start 2P'";
-      ctx.fillText("Level: " + level, canvas.width - 120, 30);
+      drawLevelUI();
 
       // Draw cake on screen
       if (cake.visible) {
@@ -602,6 +663,12 @@ function showLevelPause() {
     drawObstacles();
     drawPlayer();
     drawUI();
+    if (flashAlpha > 0) {
+  ctx.fillStyle = `rgba(255, 0, 0, ${flashAlpha})`;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  flashAlpha *= 0.85; // smooth fade
+}
   }
 
   function loop() {
@@ -713,4 +780,7 @@ let selectedCat =
   localStorage.getItem("selectedCat") || "assets/images/cats/cat-default.png";
 
 const bigCat = document.getElementById("bigCat");
-bigCat.src = selectedCat;
+
+if (bigCat) {
+  bigCat.src = selectedCat;
+}

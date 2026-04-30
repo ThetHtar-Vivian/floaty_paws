@@ -899,7 +899,7 @@ button:focus-visible {
   padding: 6rem 4rem 4rem 0rem;
   /* padding: 6% 12% 0% ; */
   margin: 0 auto;
-  background-image: url("/assets/images/wooden-board-for-game-ui-background-or-screen-for-your-game-development-blue-sky-and-wooden-board-on-green-grass-vector-removebg-preview.png");
+  background-image: url("../assets/images/wooden-board-for-game-ui-background-or-screen-for-your-game-development-blue-sky-and-wooden-board-on-green-grass-vector-removebg-preview.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -1153,7 +1153,7 @@ button:focus-visible {
   }
 
   .features-wrapper {
-    background-image: url("/assets/images/2d-game-background-beautiful-natural-waterfalls-in-the-middle-of-the-forest-vector.jpg");
+    background-image: url("../assets/images/2d-game-background-beautiful-natural-waterfalls-in-the-middle-of-the-forest-vector.png");
     background-size: cover;
     background-position: center bottom;
     padding: 15% 0%;
@@ -1161,7 +1161,7 @@ button:focus-visible {
   }
 
   .features-text {
-    background-image: url("/assets/images/wooden-board-for-game-ui-background-or-screen-for-your-game-development-blue-sky-and-wooden-board-on-green-grass-vector-removebg-preview.png");
+    background-image: url("../assets/images/wooden-board-for-game-ui-background-or-screen-for-your-game-development-blue-sky-and-wooden-board-on-green-grass-vector-removebg-preview.png");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     padding: 60px 30px;
@@ -1263,7 +1263,7 @@ button:focus-visible {
     width: 300px;
     height: 300px;
     margin: 0 auto;
-    background-image: url("/assets/images/wooden-board-for-game-ui-background-or-screen-for-your-game-development-blue-sky-and-wooden-board-on-green-grass-vector-removebg-preview.png");
+    background-image: url("../assets/images/wooden-board-for-game-ui-background-or-screen-for-your-game-development-blue-sky-and-wooden-board-on-green-grass-vector-removebg-preview.png");
     background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;

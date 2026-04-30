@@ -398,7 +398,7 @@ button:focus-visible {
 }
 
 .features {
-  background-image: url("../assets/images/2d-game-background-beautiful-natural-waterfalls-in-the-middle-of-the-forest-vector.jpg");
+  background-image: url("../assets/images/2d-game-background-beautiful-natural-waterfalls-in-the-middle-of-the-forest-vector.png");
 }
 
 .features-wrapper {
@@ -463,7 +463,7 @@ button:focus-visible {
 }
 
 .screens {
-  background-image: url("/assets/images/screenbg.jpg");
+  background-image: url("../assets/images/screenbg.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

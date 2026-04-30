@@ -398,12 +398,12 @@ button:focus-visible {
 }
 
 .features {
-  background-image: url("../assets/images/2d-game-background-beautiful-natural-waterfalls-in-the-middle-of-the-forest-vector.jpg");
+  background-image: url("/assets/images/2d-game-background-beautiful-natural-waterfalls-in-the-middle-of-the-forest-vector.jpg");
 }
 
 .features-wrapper {
   position: relative;
-  background-image: url("../assets/images/wooden-board-for-game-ui-background-or-screen-for-your-game-development-blue-sky-and-wooden-board-on-green-grass-vector-removebg-preview.png");
+  background-image: url("/assets/images/wooden-board-for-game-ui-background-or-screen-for-your-game-development-blue-sky-and-wooden-board-on-green-grass-vector-removebg-preview.png");
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;

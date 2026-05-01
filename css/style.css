@@ -649,6 +649,7 @@ button:focus-visible {
   background-size: cover;
   background-attachment: fixed;
   position: relative;
+  overflow-y: auto;
 }
 
 .catgame-wrapper > * {
